@@ -7,40 +7,47 @@ String sqlInsert;
 String filePath;
 String filePathtoOpen;
 String fileNametoSave;
+String dbTableName;
+List<String> dbTableColumns;
 
 Console.WriteLine("File path of csv file?");
 filePathtoOpen = Console.ReadLine();
 
 Console.WriteLine("Table Name?");
-String dbTableName = Console.ReadLine();
-List<String> dbTableColumns = new List<String>();
-Console.WriteLine("How many columns?");
-int dbColumnCount = Int32.Parse(Console.ReadLine());
-if (dbColumnCount > 0)
-{
-    for (int i = 0; i < dbColumnCount; i++)
-    {
-        Console.WriteLine("Name of column " + (i + 1) + "?");
-        columnName = Console.ReadLine();
-        dbTableColumns.Add(columnName);
-    }
-}
-sqlInsert = "Insert into " + dbTableName + " (";
+dbTableName = Console.ReadLine();
 
-foreach (string cn in dbTableColumns)
-{
-    sqlInsert += cn + ",";
-}
+//dbTableColumns = new List<String>();
+//Console.WriteLine("How many columns?");
+//int dbColumnCount = Int32.Parse(Console.ReadLine());
 
-sqlInsert += "),\n";
+//for (int i = 0; i < dbColumnCount; i++)
+//{
+//    Console.WriteLine("Name of column " + (i + 1) + "?");
+//    columnName = Console.ReadLine();
+//    dbTableColumns.Add(columnName);
+//}
 
+string firstLine = File.ReadLines(filePathtoOpen).First();
+sqlInsert = "Insert into " + dbTableName + " (" + firstLine + "),\n";
 
-foreach (string csvLine in File.ReadLines(filePathtoOpen))
+//foreach (string cn in dbTableColumns)
+//{
+//    sqlInsert += cn + ",";
+//}
+
+//sqlInsert += "),\n";
+//string firstLine = File.ReadLines(filePathtoOpen).First();
+//dbTableColumns = new List<String>();
+//dbTableColumns = firstLine.Split(',').ToList();
+//int num = dbTableColumns.Count;
+//Console.WriteLine(num);
+
+foreach (string csvLine in File.ReadLines(filePathtoOpen).Skip(0))
 {
     sqlInsert += "(" + csvLine + ")," + "\n";
 }
 sqlInsert = sqlInsert.Remove(sqlInsert.Length - 2) + ";";
-sqlInsert = sqlInsert.Replace("\"", ""); 
+sqlInsert = sqlInsert.Replace("\"", "");
 
 Console.WriteLine(sqlInsert);
 Console.WriteLine("What would you like to name the query?");
