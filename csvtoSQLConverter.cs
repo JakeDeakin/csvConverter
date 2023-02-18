@@ -1,8 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-using System.ComponentModel;
-using System.Data.Common;
-
-String sqlInsert = "Insert into ";
+﻿String sqlInsert = "Insert into ";
 String filePath = "C:\\Users\\Jake\\Documents\\sqlOutput";
 String filePathtoOpen = "C:\\Users\\Jake\\Documents\\TestCSv.csv";
 String dbTableName = "Table";
