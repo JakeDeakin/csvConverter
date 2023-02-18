@@ -3,11 +3,9 @@ using System.ComponentModel;
 using System.Data.Common;
 
 String sqlInsert = "Insert into ";
-String filePath = "C:\\Users\\Jake\\Documents";
+String filePath = "C:\\Users\\Jake\\Documents\\sqlOutput";
 String filePathtoOpen = "C:\\Users\\Jake\\Documents\\TestCSv.csv";
-String fileNametoSave;
-String filePathtoSave = "Path has not been set.";
-String dbTableName;
+String dbTableName = "Table";
 Boolean validFileName = false;
 Boolean validFilePath = false;
 
@@ -15,14 +13,23 @@ do
 {
     try
     {
-        //Uncomment this section to change the filepath to the csv file.
-       // Console.WriteLine("File path of csv file? (including name of file");
-      //  filePathtoOpen = Console.ReadLine();
+        if (filePathtoOpen == String.Empty || filePathtoOpen == null)
+        {
+            Console.WriteLine("File path of csv file? (including name of file)");
+            filePathtoOpen = Console.ReadLine() ?? String.Empty;
+        }
+
+        if (filePathtoOpen == null)
+        {
+            throw new Exception("File path is null");
+        }
+
         string firstLine = File.ReadLines(filePathtoOpen).First();
+
         validFilePath = true;
 
         Console.WriteLine("Table Name?");
-        dbTableName = Console.ReadLine();
+        dbTableName = Console.ReadLine() ?? String.Empty;
 
         sqlInsert = "Insert into " + dbTableName + " (" + firstLine + "),\n";
 
@@ -39,6 +46,7 @@ do
     {
         Console.WriteLine(ex.Message);
         Console.WriteLine("Please enter a valid file path.");
+        filePathtoOpen = String.Empty;
     }
 
 } while (!validFilePath);
@@ -47,25 +55,30 @@ do
 {
     try
     {
-        //Uncomment 2 lines below to not use the hard coded filepath
-        //Console.WriteLine("Where would you like to save the query? (path only, not the name)");
-        //filePath = Console.ReadLine();
+        if (filePath == String.Empty || filePath == null)
+        {
+            Console.WriteLine("Where would you like to save the query? (file name inclusive)");
 
-        Console.WriteLine("What would you like to name the query?");
-        fileNametoSave = Console.ReadLine();
-        filePathtoSave = filePath + "\\" + fileNametoSave;
-        File.WriteAllText(filePathtoSave, sqlInsert);
+            filePath = Console.ReadLine() ?? String.Empty;
+        }
+
+        if (filePath == null)
+        {
+            throw new Exception("File path is null");
+        }
+        File.WriteAllText(filePath, sqlInsert);
         validFileName = true;
     }
     catch (Exception ex)
     {
         Console.WriteLine(ex.Message);
-        Console.WriteLine("You must give a file name for the query to be saved.");
+        Console.WriteLine("You must give a valid file path for the query to be saved.");
+        filePath = String.Empty;
     }
    
 } while (!validFileName);
 
-Console.WriteLine("File saved to " + filePathtoSave);
+Console.WriteLine("File saved to " + filePath);
 
 
 
