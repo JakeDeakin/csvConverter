@@ -1,16 +1,19 @@
-﻿namespace MyConverter
+﻿using System.Windows.Markup;
+
+namespace MyConverter
 {
     public class MainController
     {
         static readonly String? filePath = "C:\\Users\\Jake\\Documents\\sqlOutput";
-        static readonly String? filePathtoOpen = "C:\\Users\\Jake\\Documents\\test.csv";
+        static readonly String? filePathtoOpen = "C:\\Users\\Jake\\Documents\\test2.csv";
         //static readonly String? filePath;
         //static readonly String? filePathtoOpen;
 
         public static void Main()
         {
             CSVToSQLConverter converter = new();
-            converter.ConvertCSVToSQLFile(filePathtoOpen, filePath);
+            converter.TransposeColumns(filePathtoOpen, filePath);
+            //converter.ConvertCSVToSQLFile(filePathtoOpen, filePath);
         }
     }
 
@@ -65,7 +68,12 @@
 
             } while (!validFilePath);
 
-            do 
+            saveOutput(sqlInsert,filePathtoSave);
+        }
+
+        private void saveOutput(string output, string? filePathtoSave)
+        {
+            do
             {
                 try
                 {
@@ -80,7 +88,7 @@
                     {
                         throw new Exception("File path is null");
                     }
-                    File.WriteAllText(filePathtoSave, sqlInsert);
+                    File.WriteAllText(filePathtoSave, output);
                     validFileName = true;
                 }
                 catch (Exception ex)
@@ -95,6 +103,45 @@
             Console.WriteLine("File saved to " + filePathtoSave);
         }
 
+        public void TransposeColumns(String? filePathtoOpen, String? filePathtoSave)
+        {
+            List<List<String>> columns = new ();
+            List<String> rows = new ();
+            String values = "";
+            List<String> tempRows = new();
+            List<List<String>> tempColumns = new();
+            
+
+            foreach (string line in File.ReadLines(filePathtoOpen))
+            {
+                rows = line.Split(',').ToList();
+                columns.Add(rows);
+            }
+
+            for (int i = 0; i < rows.Count; i++)
+            {
+                tempRows = new();
+                foreach (List<String> list in columns)
+                {
+                    tempRows.Add(list[i]);
+                }
+                tempColumns.Add(tempRows);
+            }
+            columns = tempColumns;
+
+            foreach (List<String> list in columns)
+            {
+                foreach (String value in list)
+                {
+                    values += value + ",";
+                }
+                values = values.Remove(values.Length - 1) + "\n";
+            }
+            Console.WriteLine(values);
+
+            saveOutput(values, filePathtoSave);
+            ConvertCSVToSQLFile(filePathtoSave, filePathtoSave);
+        }
     }
 
 }
