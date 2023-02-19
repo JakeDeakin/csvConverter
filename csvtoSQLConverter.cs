@@ -108,7 +108,7 @@ namespace MyConverter
             List<List<String>> columns = new ();
             List<String> rows = new ();
             String values = "";
-            List<String> tempRows = new();
+            List<String> tempRows;
             List<List<String>> tempColumns = new();
             
 
@@ -127,13 +127,15 @@ namespace MyConverter
                 }
                 tempColumns.Add(tempRows);
             }
+
             columns = tempColumns;
 
             foreach (List<String> list in columns)
             {
-                foreach (String value in list)
+                string firstValue = list[0];
+                foreach (String value in list.Skip(1))
                 {
-                    values += value + ",";
+                    values += firstValue + "," + value + "\n";
                 }
                 values = values.Remove(values.Length - 1) + "\n";
             }
