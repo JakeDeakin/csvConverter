@@ -2,16 +2,15 @@
 {
     public class MainController
     {
-        //static readonly String filePath = "C:\\Users\\Jake\\Documents\\sqlOutput";
-        //static readonly String filePathtoOpen = "C:\\Users\\Jake\\Documents\\test.csv";
-        static readonly String? filePath;
-        static readonly String? filePathtoOpen;
+        static readonly String? filePath = "C:\\Users\\Jake\\Documents\\sqlOutput";
+        static readonly String? filePathtoOpen = "C:\\Users\\Jake\\Documents\\test.csv";
+        //static readonly String? filePath;
+        //static readonly String? filePathtoOpen;
 
         public static void Main()
         {
             CSVToSQLConverter converter = new();
             converter.ConvertCSVToSQLFile(filePathtoOpen, filePath);
-
         }
     }
 
@@ -48,7 +47,7 @@
 
                     sqlInsert = "Insert into " + dbTableName + " (" + firstLine + "),\n";
 
-                    foreach (string csvLine in File.ReadLines(filePathtoOpen).Skip(0))
+                    foreach (string csvLine in File.ReadLines(filePathtoOpen).Skip(1))
                     {
                         sqlInsert += "(" + csvLine + ")," + "\n";
                     }
@@ -66,7 +65,7 @@
 
             } while (!validFilePath);
 
-            do
+            do 
             {
                 try
                 {
