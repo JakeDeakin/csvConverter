@@ -8,7 +8,7 @@
     Boolean validFilePath = false;
 
 
-    public static void Main(String[] args)
+    public static void Main()
     {
         csvtoSQLConverter converter = new csvtoSQLConverter();
         converter.convertCSVtoSQLFile(filePathtoOpen, filePath);
